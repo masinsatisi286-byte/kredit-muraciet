@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürətli Kredit Müraciəti</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --accent: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .fee-box {
+            background: #eff6ff;
+            border: 1px dashed var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .fee-box strong {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .calc-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .calc-row.total {
+            font-weight: bold;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Sürətli və Onlayn Kredit Müraciəti</h1>
+        <p>Arayışsız, zəmanətsiz onlayn qiymətləndirmə</p>
+        <div class="badge">Xidmət haqqı: cəmi 5 AZN</div>
+    </header>
+
+    <div class="grid">
+        <!-- Kalkulyator -->
+        <div class="card">
+            <h2>Kredit Kalkulyatoru</h2>
+            
+            <div class="form-group">
+                <label for="amount">Kredit Məbləği (AZN): <span id="amountVal">1000</span> AZN</label>
+                <input type="range" id="amount" min="100" max="5000" step="100" value="1000" oninput="calculate()">
+            </div>
+
+            <div class="form-group">
+                <label for="months">Müddət (Ay): <span id="monthsVal">12</span> ay</label>
+                <input type="range" id="months" min="3" max="24" step="1" value="12" oninput="calculate()">
+            </div>
+
+            <div class="calc-result">
+                <div class="calc-row">
+                    <span>Aylıq ödəniş (təxmini):</span>
+                    <strong id="monthlyPay">90 AZN</strong>
+                </div>
+                <div class="calc-row">
+                    <span>Müraciət xidmət haqqı:</span>
+                    <strong>5 AZN</strong>
+                </div>
+                <div class="calc-row total">
+                    <span>Cəmi ödəniləcək məbləğ:</span>
+                    <strong id="totalPay">1080 AZN</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Müraciət Forması -->
+        <div class="card">
+            <h2>Müraciət Forması</h2>
+            <form id="loanForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="fullname">Ad və Soyadınız</label>
+                    <input type="text" id="fullname" placeholder="Məs: Əli Əliyev" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Əlaqə Nömrəsi</label>
+                    <input type="tel" id="phone" placeholder="050 000 00 00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fin">Şəxsiyyət Vəsiqəsinin FIN Kodu</label>
+                    <input type="text" id="fin" placeholder="XXXXXXX" maxlength="7" required style="text-transform: uppercase;">
+                </div>
+
+                <div class="fee-box">
+                     Müraciətin baxılması üçün <strong>5 AZN</strong> xidmət haqqı tələb olunur.
+                </div>
+
+                <button type="submit" class="btn">Müraciət Et və Ödənişə Keç (5 AZN)</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const amount = parseFloat(document.getElementById('amount').value);
+        const months = parseInt(document.getElementById('months').value);
+        
+        document.getElementById('amountVal').innerText = amount;
+        document.getElementById('monthsVal').innerText = months;
+
+        // Təxmini faiz dərəcəsi: illik 16%
+        const annualRate = 0.16;
+        const monthlyRate = annualRate / 12;
+        
+        const monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        const totalPayment = monthlyPayment * months;
+
+        document.getElementById('monthlyPay').innerText = monthlyPayment.toFixed(2) + " AZN";
+        document.getElementById('totalPay').innerText = totalPayment.toFixed(2) + " AZN";
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const fullname = document.getElementById('fullname').value;
+        const phone = document.getElementById('phone').value;
+        const amount = document.getElementById('amountVal').innerText;
+
+        alert(`Hürmətli ${fullname}, müraciətiniz qeydə alındı!\n\nKredit məbləği: ${amount} AZN\nMüraciət haqqı: 5 AZN\n\nİndi ödəniş səhifəsinə yönləndirilirsiniz...`);
+        
+        // Bura ödəniş sisteminin (məsələn, MilliÖN, eManat, PayRiff və ya Kapital Bank/M360 ödəniş linkini) inteqrasiya edə bilərsiniz.
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>
